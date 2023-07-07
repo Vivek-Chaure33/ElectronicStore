@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
 
+        logger.info("fetching user detail");
 
         //generate unique id in String format
         String userId = UUID.randomUUID().toString();
@@ -41,6 +42,8 @@ public class UserServiceImpl implements UserService {
         //Entity -> dto
         UserDto newDto = mapper.map(saveUser , UserDto.class);
 
+        logger.info("completed request for saving the user");
+
         return newDto;
     }
 
@@ -48,6 +51,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
+
+        logger.info("fetching user from userId");
 
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
         user.setName(userDto.getName());
@@ -60,23 +65,35 @@ public class UserServiceImpl implements UserService {
 
         UserDto updatedDto = mapper.map(updatedUser , UserDto.class);
 
+        logger.info("Complete request for update user");
+
         return updatedDto;
     }
 
     @Override
     public void deleteUser(String userId) {
+
+        logger.info("Fetching user details");
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
         //delete user
         userRepository.delete(user);
+
+        logger.info("complete request for delete user");
 
     }
 
     @Override
     public List<UserDto> getAllUsers() {
+
+        logger.info("Fetching all users detail");
+
         List<User> allUsers = userRepository.findAll();
 
         //convert all list object into dto
         List<UserDto> dtoList = allUsers.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
+
+        logger.info("complete request for get all users");
 
         return dtoList;
     }
@@ -84,9 +101,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(String userId) {
 
+        logger.info("Fetching user details ");
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
 
         UserDto singleUser = mapper.map(user , UserDto.class);
+
+        logger.info("complete request for get user");
 
         return singleUser;
     }
@@ -94,43 +115,52 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
 
+        logger.info("Fetching user details by email");
+
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+email));
+
+        logger.info("complete request for get user by email");
 
         return mapper.map(user , UserDto.class);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword) {
+
+        logger.info("Fetching users detail");
+
         List<User> users = userRepository.findByNameContaining(keyword);
 
         List<UserDto> dtoList = users.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
 
+        logger.info("complete request for search user");
+
         return dtoList;
     }
 
- //   private UserDto entityToDto(User user) {
-//        UserDto userDto = UserDto.builder().userId(user.getUserId())
-//                .name(user.getName())
-//                .email(user.getEmail())
-//                .about(user.getAbout())
-//                .password(user.getPassword())
-//                .gender(user.getGender())
-//                .imageName(user.getImageName()).build();
+/*    private UserDto entityToDto(User user) {
+        UserDto userDto = UserDto.builder().userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .about(user.getAbout())
+                .password(user.getPassword())
+                .gender(user.getGender())
+                .imageName(user.getImageName()).build();
 
-  //      return mapper.map(user , UserDto.class);
- //   }
+        return mapper.map(user , UserDto.class);
+    }
 
- //   private User dtoToEntity(UserDto userDto) {
-//        User user = User.builder().userId(userDto.getUserId())
-//                .name(userDto.getName())
-//                .email(userDto.getEmail())
-//                .password(userDto.getPassword())
-//                .about(userDto.getAbout())
-//                .gender(userDto.getGender()).
-//                imageName(userDto.getImageName()).build();
+    private User dtoToEntity(UserDto userDto) {
+        User user = User.builder().userId(userDto.getUserId())
+                .name(userDto.getName())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .about(userDto.getAbout())
+                .gender(userDto.getGender()).
+                imageName(userDto.getImageName()).build();
 
-//        return mapper.map(userDto , User.class);
-//    }
-
+        return mapper.map(userDto , User.class);
+    }
+*/
 
 }
