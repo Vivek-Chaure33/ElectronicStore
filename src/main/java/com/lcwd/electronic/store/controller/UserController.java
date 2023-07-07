@@ -1,5 +1,7 @@
 package com.lcwd.electronic.store.controller;
 
+import com.lcwd.electronic.store.dto.ApiConstant;
+import com.lcwd.electronic.store.dto.ApiResponseMessage;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.service.UserService;
 import org.slf4j.Logger;
@@ -32,11 +34,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
 
-        logger.info("Creating user");
+        logger.info("Intiating request to create user");
 
         UserDto createdUserDto = userService.createUser(userDto);
 
-        logger.info("user created:"+createdUserDto);
+        logger.info("Completed reqest of create user");
 
         return new ResponseEntity<>(createdUserDto , HttpStatus.CREATED);
 
@@ -57,11 +59,11 @@ public class UserController {
             @RequestBody UserDto userDto
     ) {
 
-        logger.info("Updating user");
+        logger.info("Initiating request to update user");
 
         UserDto updatedUserDto = userService.updateUser(userDto, userId);
 
-        logger.info("User Updated:"+updatedUserDto);
+        logger.info("Complete request of update user ");
 
         return new ResponseEntity<>(updatedUserDto , HttpStatus.CREATED);
 
@@ -75,15 +77,20 @@ public class UserController {
 
     //delete
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId){
+    public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable("userId") String userId){
 
-        logger.info("deleting user");
+        logger.info("Initiating request to delete user");
 
         userService.deleteUser(userId);
 
-        logger.info("User deleted");
+        logger.info("complete request of delete user");
 
-        return new ResponseEntity<>("user deleted success" , HttpStatus.OK);
+        ApiResponseMessage message = ApiResponseMessage.builder()
+                .message(ApiConstant.USER_DELETE)
+                .success(true)
+                .status(HttpStatus.OK).build();
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
 
     }
 
@@ -97,11 +104,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers(){
 
-        logger.info("getting all user");
+        logger.info("Initiating request to get all user");
 
         List<UserDto> allUsersDtos = userService.getAllUsers();
 
-        logger.info("all user:" +allUsersDtos);
+        logger.info("Compelete request of get all user");
 
         return new ResponseEntity<>(allUsersDtos , HttpStatus.OK);
     }
@@ -116,11 +123,11 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable("userId") String userId){
 
-        logger.info("getting user by id");
+        logger.info("Initiating request to get user");
 
         UserDto singleUserDto = userService.getUser(userId);
 
-        logger.info("user is:" +singleUserDto);
+        logger.info("Complete request to get user");
 
         return new ResponseEntity<>(singleUserDto , HttpStatus.OK);
     }
@@ -135,11 +142,11 @@ public class UserController {
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email){
 
-        logger.info("getting user by email");
+        logger.info("Initiating request to get user");
 
         UserDto userByEmail = userService.getUserByEmail(email);
 
-        logger.info("user is:"+userByEmail);
+        logger.info("Complete request of get user");
 
         return new ResponseEntity<>(userByEmail , HttpStatus.OK);
     }
@@ -154,8 +161,14 @@ public class UserController {
     @GetMapping("/search/{keywords}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable("keywords") String keywords){
 
-        logger.info("searching user by keyword");
-        return new ResponseEntity<>(userService.searchUser(keywords),HttpStatus.OK);
+        logger.info("Initiating request to get user");
+
+        List<UserDto> dtoList = userService.searchUser(keywords);
+
+        logger.info("Complete request of get user");
+
+        return new ResponseEntity<>(dtoList,HttpStatus.OK);
+
     }
 
 
