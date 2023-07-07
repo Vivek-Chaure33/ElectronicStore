@@ -36,10 +36,10 @@ public class UserServiceImpl implements UserService {
         userDto.setUserId(userId);
 
         //dto -> Entity
-        User user = dtoToEntity(userDto);
+        User user = mapper.map(userDto , User.class);
         User saveUser = userRepository.save(user);
         //Entity -> dto
-        UserDto newDto = entityToDto(saveUser);
+        UserDto newDto = mapper.map(saveUser , UserDto.class);
 
         return newDto;
     }
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(user);
 
-        UserDto updatedDto = entityToDto(updatedUser);
+        UserDto updatedDto = mapper.map(updatedUser , UserDto.class);
 
         return updatedDto;
     }
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         List<User> allUsers = userRepository.findAll();
 
         //convert all list object into dto
-        List<UserDto> dtoList = allUsers.stream().map((user) -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> dtoList = allUsers.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
 
         return dtoList;
     }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
 
-        UserDto singleUser = entityToDto(user);
+        UserDto singleUser = mapper.map(user , UserDto.class);
 
         return singleUser;
     }
@@ -96,19 +96,19 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+email));
 
-        return entityToDto(user);
+        return mapper.map(user , UserDto.class);
     }
 
     @Override
     public List<UserDto> searchUser(String keyword) {
         List<User> users = userRepository.findByNameContaining(keyword);
 
-        List<UserDto> dtoList = users.stream().map((user) -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> dtoList = users.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
 
         return dtoList;
     }
 
-    private UserDto entityToDto(User user) {
+ //   private UserDto entityToDto(User user) {
 //        UserDto userDto = UserDto.builder().userId(user.getUserId())
 //                .name(user.getName())
 //                .email(user.getEmail())
@@ -117,10 +117,10 @@ public class UserServiceImpl implements UserService {
 //                .gender(user.getGender())
 //                .imageName(user.getImageName()).build();
 
-        return mapper.map(user , UserDto.class);
-    }
+  //      return mapper.map(user , UserDto.class);
+ //   }
 
-    private User dtoToEntity(UserDto userDto) {
+ //   private User dtoToEntity(UserDto userDto) {
 //        User user = User.builder().userId(userDto.getUserId())
 //                .name(userDto.getName())
 //                .email(userDto.getEmail())
@@ -129,8 +129,8 @@ public class UserServiceImpl implements UserService {
 //                .gender(userDto.getGender()).
 //                imageName(userDto.getImageName()).build();
 
-        return mapper.map(userDto , User.class);
-    }
+//        return mapper.map(userDto , User.class);
+//    }
 
 
 }
