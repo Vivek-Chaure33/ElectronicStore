@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.OverridesAttribute;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +34,7 @@ public class UserController {
 
     //create
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
 
         logger.info("Intiating request to create user");
 
@@ -56,7 +58,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(
             @PathVariable("userId") String userId ,
-            @RequestBody UserDto userDto
+            @Valid @RequestBody UserDto userDto
     ) {
 
         logger.info("Initiating request to update user");

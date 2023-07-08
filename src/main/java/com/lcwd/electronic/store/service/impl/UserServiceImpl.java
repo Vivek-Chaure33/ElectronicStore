@@ -3,6 +3,7 @@ package com.lcwd.electronic.store.service.impl;
 import com.lcwd.electronic.store.dto.ApiConstant;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.entity.User;
+import com.lcwd.electronic.store.exception.ResourceNotFoundException;
 import com.lcwd.electronic.store.repository.UserRepository;
 import com.lcwd.electronic.store.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
         logger.info("fetching user from userId");
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
         user.setName(userDto.getName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         logger.info("Fetching user details");
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
         //delete user
         userRepository.delete(user);
 
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
         logger.info("Fetching user details ");
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
 
         UserDto singleUser = mapper.map(user , UserDto.class);
 
@@ -117,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
         logger.info("Fetching user details by email");
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException(ApiConstant.USER_NOT_FOUND+email));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+email));
 
         logger.info("complete request for get user by email");
 
