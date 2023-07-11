@@ -1,6 +1,7 @@
 package com.lcwd.electronic.store.service.impl;
 
 import com.lcwd.electronic.store.dto.ApiConstant;
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.entity.User;
 import com.lcwd.electronic.store.exception.ResourceNotFoundException;
@@ -10,6 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,18 +90,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public PageableResponse<UserDto> getAllUsers(int pageNumber , int pageSize , String sortBy , String sortDir) {
+
+
 
         logger.info("Fetching all users detail");
 
-        List<User> allUsers = userRepository.findAll();
+        Sort sort =sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize ,sort);
+
+        Page<User> page = userRepository.findAll(pageable);
+
+        List<User> allUsers = page.getContent();
+
+//        List<User> allUsers = userRepository.findAll();
 
         //convert all list object into dto
-        List<UserDto> dtoList = allUsers.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
+        List<Object> dtoList = allUsers.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
+
+        PageableResponse pageableResponse  = PageableResponse.builder()
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .lastPage(page.isLast())
+                .content(dtoList)
+                .totalElements(page.getTotalElements()).build();
 
         logger.info("complete request for get all users");
 
-        return dtoList;
+        return pageableResponse;
     }
 
     @Override

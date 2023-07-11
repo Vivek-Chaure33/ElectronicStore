@@ -2,6 +2,7 @@ package com.lcwd.electronic.store.controller;
 
 import com.lcwd.electronic.store.dto.ApiConstant;
 import com.lcwd.electronic.store.dto.ApiResponseMessage;
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.service.UserService;
 import org.slf4j.Logger;
@@ -104,11 +105,16 @@ public class UserController {
 
     //get all user
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers(){
+    public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
+            @RequestParam(value = "pageNumber", defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "pageSize" ,defaultValue = "10" ,required = false) int pageSize,
+            @RequestParam(value = "sortBy" , defaultValue = "name" , required = false) String sortBy,
+            @RequestParam(value = "sortDir" , defaultValue = "asc" ,required = false) String sortDir
+    ){
 
         logger.info("Initiating request to get all user");
 
-        List<UserDto> allUsersDtos = userService.getAllUsers();
+        PageableResponse<UserDto> allUsersDtos = userService.getAllUsers(pageNumber,pageSize,sortBy , sortDir);
 
         logger.info("Compelete request of get all user");
 

@@ -1,5 +1,6 @@
 package com.lcwd.electronic.store.service;
 
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.entity.User;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public interface UserService {
     void deleteUser(String userId);
 
     //get all users
-    List<UserDto> getAllUsers();
+    PageableResponse<UserDto> getAllUsers(int pageNumber , int pageSize , String sortBy , String sortDir);
 
     //get single user by id
     UserDto getUser(String userId);
