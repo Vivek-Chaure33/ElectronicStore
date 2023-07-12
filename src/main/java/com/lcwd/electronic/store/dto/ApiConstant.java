@@ -10,4 +10,6 @@ public class ApiConstant {
     public static final String USER_NOT_FOUND = "User not found:";
     public static final String USER_DELETE = "User deleted successfully";
 
+    public static final String EXTENSION = "Extension not allowed:";
+
 }

@@ -5,6 +5,7 @@ import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.entity.User;
 import com.lcwd.electronic.store.exception.ResourceNotFoundException;
+import com.lcwd.electronic.store.helper.Helper;
 import com.lcwd.electronic.store.repository.UserRepository;
 import com.lcwd.electronic.store.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -102,19 +103,8 @@ public class UserServiceImpl implements UserService {
 
         Page<User> page = userRepository.findAll(pageable);
 
-        List<User> allUsers = page.getContent();
+        PageableResponse<UserDto> pageableResponse = Helper.getPageableResponse(page, UserDto.class);
 
-//        List<User> allUsers = userRepository.findAll();
-
-        //convert all list object into dto
-        List<Object> dtoList = allUsers.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
-
-        PageableResponse pageableResponse  = PageableResponse.builder()
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .lastPage(page.isLast())
-                .content(dtoList)
-                .totalElements(page.getTotalElements()).build();
 
         logger.info("complete request for get all users");
 
