@@ -12,4 +12,7 @@ public class ApiConstant {
 
     public static final String EXTENSION = "Extension not allowed:";
 
+    public static final String IMAGE_UPLOAD = "Image upload successfully.";
+    public static final String CATEGORY_NOT_FOUND = "Category not found:";
+    public static final String CATEGORY_DELETE = "Category deleted successfully";
 }
