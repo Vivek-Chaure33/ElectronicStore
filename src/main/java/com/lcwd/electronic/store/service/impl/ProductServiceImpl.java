@@ -11,6 +11,8 @@ import com.lcwd.electronic.store.repository.CategoryRepository;
 import com.lcwd.electronic.store.repository.ProductRepository;
 import com.lcwd.electronic.store.service.ProductServiceI;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -41,6 +43,7 @@ public class ProductServiceImpl implements ProductServiceI {
     @Autowired
     private ProductRepository productRepo;
 
+    private Logger logger= LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
@@ -147,7 +150,9 @@ public class ProductServiceImpl implements ProductServiceI {
     public ProductDto createWithCategory(@RequestBody ProductDto productDto , @PathVariable String categoryId)
     {
 
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
+        logger.info("category object:{}",category.getTitle());
         Product product = mapper.map(productDto, Product.class);
         String productId = UUID.randomUUID().toString();
         product.setProdructId(productId);

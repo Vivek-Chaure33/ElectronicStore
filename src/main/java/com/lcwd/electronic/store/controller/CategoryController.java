@@ -3,6 +3,7 @@ package com.lcwd.electronic.store.controller;
 import com.lcwd.electronic.store.dto.*;
 import com.lcwd.electronic.store.service.CategoryService;
 import com.lcwd.electronic.store.service.FileService;
+import com.lcwd.electronic.store.service.ProductServiceI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class CategoryController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private ProductServiceI productServiceI;
 
     private Logger logger =  LoggerFactory.getLogger(CategoryController.class);
 
@@ -195,11 +199,12 @@ public class CategoryController {
         logger.info("Completed request of serve image");
 
     }
-    public ResponseEntity<ProductDto> createProductWithCategory(){
-
-
-
-        return new ResponseEntity<>(null,HttpStatus.CREATED);
+    @PostMapping("/{categoryId}/products")
+    public ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto,
+                                                                @PathVariable String categoryId)
+    {
+        ProductDto withCategory = productServiceI.createWithCategory(productDto, categoryId);
+        return new ResponseEntity<>(withCategory,HttpStatus.CREATED);
     }
 
 

@@ -2,6 +2,8 @@ package com.lcwd.electronic.store.service;
 
 import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.ProductDto;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -26,5 +28,7 @@ public interface ProductServiceI {
 
     //search
     PageableResponse<ProductDto> searchByTitle(String subString ,int pageSize , int pageNumber , String sortBy , String sortDir);
+
+     ProductDto createWithCategory(@RequestBody ProductDto productDto , @PathVariable String categoryId);
 
 }
