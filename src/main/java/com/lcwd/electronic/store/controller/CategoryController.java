@@ -195,5 +195,12 @@ public class CategoryController {
         logger.info("Completed request of serve image");
 
     }
+    public ResponseEntity<ProductDto> createProductWithCategory(){
+
+
+
+        return new ResponseEntity<>(null,HttpStatus.CREATED);
+    }
+
 
 }

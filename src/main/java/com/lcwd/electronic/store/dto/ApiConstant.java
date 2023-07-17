@@ -15,4 +15,6 @@ public class ApiConstant {
     public static final String IMAGE_UPLOAD = "Image upload successfully.";
     public static final String CATEGORY_NOT_FOUND = "Category not found:";
     public static final String CATEGORY_DELETE = "Category deleted successfully";
+    public static final String PRODUCT_NOT_FOUND = "Product not found with id:";
+    public static final String PRODUCT_DELETE = "Product deleted successfully";
 }
