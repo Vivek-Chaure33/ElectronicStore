@@ -86,7 +86,7 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponseMessage> deleteCategory(@PathVariable String categoryId){
 
-        logger.info("Initiating requst for delete category");
+        logger.info("Initiating request for delete category");
 
         categoryService.delete(categoryId);
         ApiResponseMessage response = ApiResponseMessage.builder()
@@ -203,7 +203,10 @@ public class CategoryController {
     public ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto,
                                                                 @PathVariable String categoryId)
     {
+        logger.info("Initiating request for create product with category");
         ProductDto withCategory = productServiceI.createWithCategory(productDto, categoryId);
+        logger.info("Completed request of create product with category");
+
         return new ResponseEntity<>(withCategory,HttpStatus.CREATED);
     }
 
