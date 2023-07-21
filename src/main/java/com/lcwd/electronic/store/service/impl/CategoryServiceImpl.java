@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category newCategory = categoryRepo.save(category);
         CategoryDto newCategoryDto = mapper.map(newCategory, CategoryDto.class);
 
-        logger.info("sending response to controller to for create category");
+        logger.info("sending response to controller for successfully create category");
         return newCategoryDto;
     }
 
@@ -94,7 +94,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepo.delete(category);
 
-        logger.info("sending request to controller for successful delete category");
+        logger.info("sending response to controller for successfully delete category");
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CategoryServiceImpl implements CategoryService {
         Page<Category> page = categoryRepo.findAll(pageable);
         PageableResponse<CategoryDto> pageableResponse = Helper.getPageableResponse(page, CategoryDto.class);
 
-        logger.info("sending request to controller for successfully get all user");
+        logger.info("sending response to controller for successfully get all user");
         return pageableResponse;
     }
 
@@ -119,7 +119,7 @@ public class CategoryServiceImpl implements CategoryService {
         logger.info("sending request to repository for get category");
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
         CategoryDto newCategoryDto = mapper.map(category, CategoryDto.class);
-        logger.info("sending request to controller for successful get category");
+        logger.info("sending response to controller for successful get category");
         return newCategoryDto;
     }
 
@@ -129,7 +129,7 @@ public class CategoryServiceImpl implements CategoryService {
         logger.info("sending request to repository for search category by title");
         List<Category> allTitle = categoryRepo.findByTitle(keyword);
         List<CategoryDto> allCategoryDtos = allTitle.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
-        logger.info("sending request to controller for successful search category by title");
+        logger.info("sending response to controller for successful search category by title");
         return allCategoryDtos;
     }
 

@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
 
-        logger.info("fetching user detail");
+        logger.info("sending request to repository to create user");
 
         //generate unique id in String format
         String userId = UUID.randomUUID().toString();
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         //Entity -> dto
         UserDto newDto = mapper.map(saveUser , UserDto.class);
 
-        logger.info("completed request for saving the user");
+        logger.info("sending response to controller for successfully create user");
 
         return newDto;
     }
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
 
-        logger.info("fetching user from userId");
+        logger.info("sending request to repository for update user");
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
         user.setName(userDto.getName());
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
         UserDto updatedDto = mapper.map(updatedUser , UserDto.class);
 
-        logger.info("Complete request for update user");
+        logger.info("sending response to controller for successfully update user");
 
         return updatedDto;
     }
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
 
-        logger.info("Fetching user details");
+        logger.info("sending request to repository for delete user");
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
 
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
         //delete user
         userRepository.delete(user);
 
-        logger.info("complete request for delete user");
+        logger.info("sending response to controller for successfully delete user");
 
     }
 
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-        logger.info("Fetching all users detail");
+        logger.info("sending request to repository for get all user");
 
         Sort sort =sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
 
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         PageableResponse<UserDto> pageableResponse = Helper.getPageableResponse(page, UserDto.class);
 
 
-        logger.info("complete request for get all users");
+        logger.info("sending request to controller for successfully get all user");
 
         return pageableResponse;
     }
@@ -140,13 +140,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(String userId) {
 
-        logger.info("Fetching user details ");
+        logger.info("sending request to repository for get user");
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+userId));
 
         UserDto singleUser = mapper.map(user , UserDto.class);
 
-        logger.info("complete request for get user");
+        logger.info("sending response to controller for get user");
 
         return singleUser;
     }
@@ -154,11 +154,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
 
-        logger.info("Fetching user details by email");
+        logger.info("sending request to repository for get user by email");
 
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.USER_NOT_FOUND+email));
 
-        logger.info("complete request for get user by email");
+        logger.info("sending response to controller for get user by email");
 
         return mapper.map(user , UserDto.class);
     }
@@ -166,13 +166,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> searchUser(String keyword) {
 
-        logger.info("Fetching users detail");
+        logger.info("sending request to repository for search user by keyword");
 
         List<User> users = userRepository.findByNameContaining(keyword);
 
         List<UserDto> dtoList = users.stream().map((user) -> mapper.map(user , UserDto.class)).collect(Collectors.toList());
 
-        logger.info("complete request for search user");
+        logger.info("sending request to controller for successfully search user by keyword");
 
         return dtoList;
     }
