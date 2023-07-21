@@ -13,6 +13,4 @@ public class HomeController {
         return "Welcome to home";
     }
 
-
-
 }

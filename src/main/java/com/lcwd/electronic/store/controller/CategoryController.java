@@ -200,7 +200,7 @@ public class CategoryController {
 
     }
     @PostMapping("/{categoryId}/products")
-    public ResponseEntity<ProductDto> createProductWithCategory(@RequestBody ProductDto productDto,
+    public ResponseEntity<ProductDto> createProductWithCategory(@Valid@RequestBody ProductDto productDto,
                                                                 @PathVariable String categoryId)
     {
         logger.info("Initiating request for create product with category");
