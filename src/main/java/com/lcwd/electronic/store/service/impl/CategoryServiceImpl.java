@@ -45,6 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
 
+        logger.info("sending request to repository for creating user:{}",categoryDto.getTitle());
         logger.info("generating random id");
         String categoryId = UUID.randomUUID().toString();
         categoryDto.setCategoryId(categoryId);
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category newCategory = categoryRepo.save(category);
         CategoryDto newCategoryDto = mapper.map(newCategory, CategoryDto.class);
 
-        logger.info("sending response to controller for successfully create category");
+        logger.info("sending response to controller for successfully create category:{}",category.getCategoryId());
         return newCategoryDto;
     }
 
@@ -61,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(CategoryDto categoryDto, String categoryId)
     {
 
-        logger.info("sending request to repository for update category");
+        logger.info("sending request to repository for update category:{}",categoryId);
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getTitle());
@@ -69,14 +70,14 @@ public class CategoryServiceImpl implements CategoryService {
         Category updatedCategory = categoryRepo.save(category);
         CategoryDto updatedDto = mapper.map(updatedCategory, CategoryDto.class);
 
-        logger.info("sending response to controller for successfully update category");
+        logger.info("sending response to controller for successfully update category:{}",categoryId);
         return updatedDto;
     }
 
     @Override
     public void delete(String categoryId) {
 
-        logger.info("sending request to repository to delete user");
+        logger.info("sending request to repository to delete user:{}",categoryId);
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
 
         String fullPath = imageUploadPath + File.separator + category.getCoverImage();
@@ -94,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepo.delete(category);
 
-        logger.info("sending response to controller for successfully delete category");
+        logger.info("sending response to controller for successfully delete category:{}",categoryId);
     }
 
     @Override
@@ -116,20 +117,20 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto getCategory(String categoryId)
     {
 
-        logger.info("sending request to repository for get category");
+        logger.info("sending request to repository for get category:{}",categoryId);
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
         CategoryDto newCategoryDto = mapper.map(category, CategoryDto.class);
-        logger.info("sending response to controller for successful get category");
+        logger.info("sending response to controller for successful get category:{}",categoryId);
         return newCategoryDto;
     }
 
     @Override
     public List<CategoryDto> searchByTitle(String keyword) {
 
-        logger.info("sending request to repository for search category by title");
+        logger.info("sending request to repository for search category by title:{}",keyword);
         List<Category> allTitle = categoryRepo.findByTitle(keyword);
         List<CategoryDto> allCategoryDtos = allTitle.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
-        logger.info("sending response to controller for successful search category by title");
+        logger.info("sending response to controller for successful search category by title:{}",keyword);
         return allCategoryDtos;
     }
 
