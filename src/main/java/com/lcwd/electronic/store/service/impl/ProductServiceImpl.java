@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductServiceI {
     @Autowired
     private ProductRepository productRepo;
 
-    private Logger logger= LoggerFactory.getLogger(ProductServiceImpl.class);
+    private final Logger logger= LoggerFactory.getLogger(ProductServiceImpl.class);
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductServiceI {
     @Override
     public ProductDto createProduct(ProductDto productDto) {
 
-        logger.info("sending request to repository to create product");
+        logger.info("sending request to repository to create product:{}",productDto.getTitle());
         Product product = mapper.map(productDto, Product.class);
         //generate random product id
         logger.info("generating product id");
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductServiceI {
         productRepo.save(product);
         ProductDto savedProductDto = mapper.map(product, ProductDto.class);
 
-        logger.info("sending response to controller for successfully create product");
+        logger.info("sending response to controller for successfully create product:{}",productDto.getTitle());
 
         return savedProductDto;
     }
@@ -75,7 +75,7 @@ public class ProductServiceImpl implements ProductServiceI {
     public ProductDto updateProduct(ProductDto productDto, String productId)
     {
 
-        logger.info("sending request to repository to update product");
+        logger.info("sending request to repository to update product:{}",productId);
         Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.PRODUCT_NOT_FOUND + productId));
 
         product.setDescription(productDto.getDescription());
@@ -89,14 +89,14 @@ public class ProductServiceImpl implements ProductServiceI {
         Product updatedProduct = productRepo.save(product);
 
         ProductDto updatedProductDto = mapper.map(updatedProduct, ProductDto.class);
-        logger.info("sending response to the controller for successfully update product");
+        logger.info("sending response to the controller for successfully update product:{}",productId);
         return updatedProductDto;
     }
 
     @Override
     public void deleteProduct(String productId) {
 
-        logger.info("sending request to repository for delete product");
+        logger.info("sending request to repository for delete product:{}",productId);
         Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.PRODUCT_NOT_FOUND + productId));
         String fullProductImagePath = imagePath + File.separator + product.getProductImage();
 
@@ -111,7 +111,7 @@ public class ProductServiceImpl implements ProductServiceI {
         }
 
         productRepo.delete(product);
-        logger.info("sending response to the controller for successfully delete product");
+        logger.info("sending response to the controller for successfully delete product:{}",productId);
 
     }
 
@@ -142,10 +142,10 @@ public class ProductServiceImpl implements ProductServiceI {
 
     @Override
     public ProductDto getProduct(String productId) {
-        logger.info("sending request to repository for get product by productId");
+        logger.info("sending request to repository for get product by productId:{}",productId);
         Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.PRODUCT_NOT_FOUND + productId));
         ProductDto newProductDto = mapper.map(product, ProductDto.class);
-        logger.info("sending response to controller for  successfully get product by productId");
+        logger.info("sending response to controller for  successfully get product by productId:{}",productId);
         return newProductDto;
     }
 
@@ -164,7 +164,7 @@ public class ProductServiceImpl implements ProductServiceI {
     public ProductDto createWithCategory(@RequestBody ProductDto productDto , @PathVariable String categoryId)
     {
 
-        logger.info("sending request to repository for create product with category");
+        logger.info("sending request to repository for create product with category:{}",categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
         logger.info("category object:{}",category.getTitle());
         Product product = mapper.map(productDto, Product.class);
@@ -173,7 +173,7 @@ public class ProductServiceImpl implements ProductServiceI {
         product.setAddedDate(new Date());
         product.setCategory(category);
         Product saveProduct = productRepo.save(product);
-        logger.info("sending response to controller for successfully create product with category");
+        logger.info("sending response to controller for successfully create product with category:{}",categoryId);
         return mapper.map(saveProduct,ProductDto.class);
     }
 
