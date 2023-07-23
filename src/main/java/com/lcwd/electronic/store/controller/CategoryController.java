@@ -49,10 +49,10 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto) {
 
-        logger.info("Initiating request of create category");
+        logger.info("Initiating request of create category:{}",categoryDto.getTitle());
         //call service to save object
         CategoryDto newCategoryDto = categoryService.create(categoryDto);
-        logger.info("Completed request of create category ");
+        logger.info("Completed request of create category:{}",categoryDto.getTitle());
 
         return new ResponseEntity<>(categoryDto, HttpStatus.CREATED);
     }
@@ -67,10 +67,10 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid@RequestBody CategoryDto categoryDto ,@PathVariable String categoryId){
 
-        logger.info("Initiating request for update category");
+        logger.info("Initiating request for update category:",categoryId);
         //call service to update object
         CategoryDto updatedCategory = categoryService.update(categoryDto, categoryId);
-        logger.info("Complete request for update category");
+        logger.info("Complete request for update category:{}",categoryId);
 
         return new ResponseEntity<>(updatedCategory , HttpStatus.CREATED);
     }
@@ -86,14 +86,14 @@ public class CategoryController {
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<ApiResponseMessage> deleteCategory(@PathVariable String categoryId){
 
-        logger.info("Initiating request for delete category");
+        logger.info("Initiating request for delete category:{}",categoryId);
 
         categoryService.delete(categoryId);
         ApiResponseMessage response = ApiResponseMessage.builder()
                 .message(ApiConstant.CATEGORY_DELETE)
                 .status(HttpStatus.OK)
                 .success(true).build();
-        logger.info("Completed request for delete category");
+        logger.info("Completed request for delete category:{}",categoryId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -131,9 +131,9 @@ public class CategoryController {
     //get single category
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable String categoryId){
-        logger.info("Initiating request for get category");
+        logger.info("Initiating request for get category:{}",categoryId);
         CategoryDto newCategoryDto = categoryService.getCategory(categoryId);
-        logger.info("Completed request for get category");
+        logger.info("Completed request for get category:{}",categoryId);
 
         return new ResponseEntity<>(newCategoryDto,HttpStatus.OK);
     }
@@ -148,9 +148,9 @@ public class CategoryController {
     @GetMapping("/search/{title}")
     public ResponseEntity<List<CategoryDto>> getCategoryByTitle(@PathVariable String title){
 
-        logger.info("Initiating request of search category by title");
+        logger.info("Initiating request of search category by title:{}",title);
         List<CategoryDto> categoryDtos = categoryService.searchByTitle(title);
-        logger.info("Complete request of search category by title");
+        logger.info("Complete request of search category by title:{}",title);
 
         return new ResponseEntity<>(categoryDtos,HttpStatus.OK);
     }
@@ -165,10 +165,9 @@ public class CategoryController {
     @PostMapping("/image/upload/{categoryId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam(value = "categoryImage")MultipartFile file,@PathVariable String categoryId) throws IOException {
 
-        logger.info("Initiating request for upload image");
+        logger.info("Initiating request for upload category image:{}",categoryId);
 
         String uploadImage = fileService.uploadFile(file, imageUploadPath);
-
         CategoryDto categoryDto = categoryService.getCategory(categoryId);
         categoryDto.setCoverImage(uploadImage);
         categoryService.update(categoryDto,categoryId);
@@ -177,7 +176,7 @@ public class CategoryController {
                 .status(HttpStatus.OK)
                 .success(true).build();
 
-        logger.info("Completed request for upload image");
+        logger.info("Completed request for upload category image:{}",categoryId);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
@@ -187,25 +186,25 @@ public class CategoryController {
      * @param categoryId
      * @throws IOException
      */
-    @GetMapping("image/{userId}")
+    @GetMapping("image/{categoryId}")
     public void serveCategoryImage(HttpServletResponse response , @PathVariable String categoryId) throws IOException {
 
-        logger.info("Initiating request for serve image");
+        logger.info("Initiating request for serve category image:{}",categoryId);
         CategoryDto category = categoryService.getCategory(categoryId);
         logger.info("User image is {}",category.getCoverImage());
         InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
-        logger.info("Completed request of serve image");
+        logger.info("Completed request of serve category image:{}",categoryId);
 
     }
     @PostMapping("/{categoryId}/products")
     public ResponseEntity<ProductDto> createProductWithCategory(@Valid@RequestBody ProductDto productDto,
                                                                 @PathVariable String categoryId)
     {
-        logger.info("Initiating request for create product with category");
+        logger.info("Initiating request for create product with category:{}",categoryId);
         ProductDto withCategory = productServiceI.createWithCategory(productDto, categoryId);
-        logger.info("Completed request of create product with category");
+        logger.info("Completed request of create product with category:{}",categoryId);
 
         return new ResponseEntity<>(withCategory,HttpStatus.CREATED);
     }
