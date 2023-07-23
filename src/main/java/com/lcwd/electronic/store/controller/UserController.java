@@ -48,11 +48,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto){
 
-        logger.info("Intiating request to create user");
+        logger.info("Intiating request to create user:{}",userDto.getName());
 
         UserDto createdUserDto = userService.createUser(userDto);
 
-        logger.info("Completed reqest of create user");
+        logger.info("Completed reqest of create user:{}",userDto.getName());
 
         return new ResponseEntity<>(createdUserDto , HttpStatus.CREATED);
 
@@ -73,11 +73,11 @@ public class UserController {
             @Valid @RequestBody UserDto userDto
     ) {
 
-        logger.info("Initiating request to update user");
+        logger.info("Initiating request to update user:{}",userId);
 
         UserDto updatedUserDto = userService.updateUser(userDto, userId);
 
-        logger.info("Complete request of update user ");
+        logger.info("Complete request of update user:{}",userId);
 
         return new ResponseEntity<>(updatedUserDto , HttpStatus.CREATED);
 
@@ -93,11 +93,11 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable("userId") String userId){
 
-        logger.info("Initiating request to delete user");
+        logger.info("Initiating request to delete user:{}",userId);
 
         userService.deleteUser(userId);
 
-        logger.info("complete request of delete user");
+        logger.info("complete request of delete user:{}",userId);
 
         ApiResponseMessage message = ApiResponseMessage.builder()
                 .message(ApiConstant.USER_DELETE)
@@ -139,9 +139,9 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable("userId") String userId){
 
-        logger.info("Initiating request to get user");
+        logger.info("Initiating request to get user::{}",userId);
         UserDto singleUserDto = userService.getUser(userId);
-        logger.info("Complete request to get user");
+        logger.info("Complete request to get user:{}",userId);
         return new ResponseEntity<>(singleUserDto , HttpStatus.OK);
     }
 
@@ -155,9 +155,9 @@ public class UserController {
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable("email") String email){
 
-        logger.info("Initiating request to get user");
+        logger.info("Initiating request to get user:{}",email);
         UserDto userByEmail = userService.getUserByEmail(email);
-        logger.info("Complete request of get user");
+        logger.info("Complete request of get user:{}",email);
         return new ResponseEntity<>(userByEmail , HttpStatus.OK);
     }
 
@@ -171,9 +171,9 @@ public class UserController {
     @GetMapping("/search/{keywords}")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable("keywords") String keywords){
 
-        logger.info("Initiating request to get user");
+        logger.info("Initiating request to search user:{}",keywords);
         List<UserDto> dtoList = userService.searchUser(keywords);
-        logger.info("Complete request of get user");
+        logger.info("Complete request of search user:{}",keywords);
         return new ResponseEntity<>(dtoList,HttpStatus.OK);
 
     }
@@ -182,7 +182,7 @@ public class UserController {
     @PostMapping("/image/{userId}")
     ResponseEntity<ImageResponse> uploadImage(@RequestParam("userImage")MultipartFile image , @PathVariable String userId) throws IOException {
 
-        logger.info("Initiating request to upload user image");
+        logger.info("Initiating request to upload user image:{}",userId);
         String imageName = fileService.uploadFile(image, imageUploadPath);
         UserDto userDto = userService.getUser(userId);
         userDto.setImageName(imageName);
@@ -191,7 +191,7 @@ public class UserController {
                 .success(true)
                 .message(ApiConstant.IMAGE_UPLOAD)
                 .status(HttpStatus.CREATED).build();
-        logger.info("Completed request for upload user image");
+        logger.info("Completed request for upload user image:{}",userId);
 
         return new ResponseEntity<>(response , HttpStatus.CREATED);
     }
@@ -200,13 +200,13 @@ public class UserController {
     @GetMapping("image/{userId}")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
 
-        logger.info("Initialize the request to serve user image");
+        logger.info("Initialize the request to serve user image:{}",userId);
         UserDto user = userService.getUser(userId);
         logger.info("User image name:{}",user.getName());
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
-        logger.info("Completed the request to serve user image");
+        logger.info("Completed the request to serve user image:{}",userId);
 
     }
 
