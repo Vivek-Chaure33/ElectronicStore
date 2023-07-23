@@ -27,10 +27,7 @@ public class FileServiceImpl implements FileService {
         logger.info("fileName:{}", originalFilename);
         String fileName = UUID.randomUUID().toString();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-
         String fileNameWithExtension = fileName + extension;
-
-
         String fullPathWithFileName = path + File.separator + fileNameWithExtension;
 
         if (extension.equalsIgnoreCase(".png") || extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".jpeg")) {
@@ -38,9 +35,7 @@ public class FileServiceImpl implements FileService {
             //save file
             File folder = new File(path);
             if (!folder.exists()) {
-
                 folder.mkdirs();
-
             }
 
             Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));

@@ -27,7 +27,7 @@ public class ProductController {
     @Autowired
     private ProductServiceI productServiceI;
 
-    private Logger logger= LoggerFactory.getLogger(ProductController.class);
+    private final Logger logger= LoggerFactory.getLogger(ProductController.class);
     @Autowired
     private FileService fileService;
 
@@ -42,9 +42,9 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
 
-        logger.info("Initialize request to create product");
+        logger.info("Initialize request to create product:{}",productDto.getTitle());
         ProductDto newProductDto = productServiceI.createProduct(productDto);
-        logger.info("Completed request of create product");
+        logger.info("Completed request of create product:{}",productDto.getTitle());
         return new ResponseEntity<>(newProductDto, HttpStatus.CREATED);
     }
 
@@ -58,9 +58,9 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable String productId) {
 
-        logger.info("Initialize request to update product");
+        logger.info("Initialize request to update product:{}",productId);
         ProductDto updatedProductDto = productServiceI.updateProduct(productDto, productId);
-        logger.info("Completed request of update project");
+        logger.info("Completed request of update project:{}",productId);
         return new ResponseEntity<>(updatedProductDto, HttpStatus.CREATED);
     }
 
@@ -72,12 +72,12 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponseMessage> deleteProduct(@PathVariable String productId) {
-        logger.info("Initialize request to delete product");
+        logger.info("Initialize request to delete product:{}",productId);
         productServiceI.deleteProduct(productId);
         ApiResponseMessage response = ApiResponseMessage.builder().message(ApiConstant.PRODUCT_DELETE)
                 .success(true)
                 .status(HttpStatus.OK).build();
-        logger.info("Completed request of delete product");
+        logger.info("Completed request of delete product:{}",productId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -89,9 +89,9 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable String productId) {
-        logger.info("Initialize the request to get product by productId");
+        logger.info("Initialize the request to get product by productId:{}",productId);
         ProductDto product = productServiceI.getProduct(productId);
-        logger.info("Completed request of get product by productId");
+        logger.info("Completed request of get product by productId:{}",productId);
         return new ResponseEntity<>(product, HttpStatus.OK);
 
     }
@@ -158,9 +158,9 @@ public class ProductController {
             @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
     ) {
-        logger.info("Initialize the request to search product");
+        logger.info("Initialize the request to search product:{}",query);
         PageableResponse<ProductDto> productDtoPageableResponse = productServiceI.searchByTitle(query, pageSize, pageNumber, sortBy, sortDir);
-        logger.info("Completed request of search product");
+        logger.info("Completed request of search product:{}",query);
         return new ResponseEntity<>(productDtoPageableResponse, HttpStatus.OK);
     }
 
@@ -174,7 +174,7 @@ public class ProductController {
     @PostMapping("upload/image/{productId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam(value = "productImage") MultipartFile productImage, @PathVariable String productId) throws IOException {
 
-        logger.info("Initialize the request to upload product image");
+        logger.info("Initialize the request to upload product image:{}",productId);
         ProductDto product = productServiceI.getProduct(productId);
         String newProductImage = fileService.uploadFile(productImage, imagePath);
         product.setProductImage(newProductImage);
@@ -183,7 +183,7 @@ public class ProductController {
                 .success(true)
                 .status(HttpStatus.CREATED)
                 .message(ApiConstant.IMAGE_UPLOAD).build();
-        logger.info("Completed request of upload product image");
+        logger.info("Completed request of upload product image:{}",productId);
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 
@@ -196,12 +196,12 @@ public class ProductController {
     @GetMapping("/image/{productId}")
     public void serveImage(HttpServletResponse response,@PathVariable String productId) throws IOException {
 
-        logger.info("Initialize the request to serve product image");
+        logger.info("Initialize the request to serve product image:{}",productId);
         ProductDto product = productServiceI.getProduct(productId);
         InputStream resource = fileService.getResource(imagePath, product.getProductImage());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
-        logger.info("Completed request of serve product image");
+        logger.info("Completed request of serve product image:{}",productId);
     }
 
 }
