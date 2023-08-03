@@ -9,14 +9,12 @@ import com.lcwd.electronic.store.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 
 import java.util.Arrays;
@@ -26,10 +24,11 @@ import java.util.UUID;
 
 @SpringBootTest
 public class UserServiceTest {
+
     @Autowired
     private UserService userService;
 
-    @Mock
+    @MockBean
     private UserRepository userRepository;
 
     @Autowired
@@ -51,15 +50,15 @@ public class UserServiceTest {
         userId="abc";
 
     }
-//    @Test
-//    public void createUserTest(){
-//        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+    @Test
+    public void createUserTest(){
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 //        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
-//        UserDto user1=userService.createUser(this.mapper.map(user,UserDto.class));
-//        System.out.println(user1.getName());
-//        Assertions.assertNotNull(user1);
-//        Assertions.assertEquals("Vivek",user1.getName());
-//    }
+        UserDto user1=userService.createUser(mapper.map(user,UserDto.class));
+        System.out.println(user1.getName());
+        Assertions.assertNotNull(user1);
+        Assertions.assertEquals("Vivek",user1.getName());
+    }
     @Test
     public void deleteUserTest(){
         String userId = UUID.randomUUID().toString();
