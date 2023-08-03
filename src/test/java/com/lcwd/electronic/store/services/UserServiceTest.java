@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class UserServiceTest {
     private ModelMapper mapper;
     @InjectMocks
     private UserServiceImpl userServiceImpl;
-    User user;
+    User user , user1 , user2 , user3;
     String userId;
 
     @BeforeEach
@@ -49,7 +50,7 @@ public class UserServiceTest {
                 .build();
         userId="abc";
 
-        User user1= User.builder()
+         user1= User.builder()
                 .name("Nilesh")
                 .email("nilesh@gmail.com")
                 .about("this is testing create method")
@@ -57,7 +58,7 @@ public class UserServiceTest {
                 .imageName("nilesh.png")
                 .build();
 
-        User user2 = User.builder()
+         user2 = User.builder()
                 .name("ajay")
                 .email("ajay@gmail.com")
                 .about("this is testing create method")
@@ -65,7 +66,7 @@ public class UserServiceTest {
                 .imageName("ajay.jpg")
                 .build();
 
-        User user3 = User.builder()
+         user3 = User.builder()
                 .name("Shrikant")
                 .email("shrikant@gmail.com")
                 .about("this is testing create method")
@@ -160,6 +161,16 @@ public class UserServiceTest {
         Assertions.assertEquals(user.getEmail(),userByEmail.getEmail(),"Email not matched !!");
 
     }
+    @Test
+    public void searchUserTest(){
+        String keyword="chaure";
+
+        Mockito.when(userRepository.findByNameContaining(keyword)).thenReturn(Arrays.asList(user1,user2,user3));
+        List<UserDto> userDtos = userService.searchUser(keyword);
+        Assertions.assertEquals(3,userDtos.size(),"Size not matched !!");
+
+    }
+
 
 
 
