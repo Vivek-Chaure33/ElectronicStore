@@ -49,6 +49,31 @@ public class UserServiceTest {
                 .build();
         userId="abc";
 
+        User user1= User.builder()
+                .name("Nilesh")
+                .email("nilesh@gmail.com")
+                .about("this is testing create method")
+                .gender("male")
+                .imageName("nilesh.png")
+                .build();
+
+        User user2 = User.builder()
+                .name("ajay")
+                .email("ajay@gmail.com")
+                .about("this is testing create method")
+                .gender("male")
+                .imageName("ajay.jpg")
+                .build();
+
+        User user3 = User.builder()
+                .name("Shrikant")
+                .email("shrikant@gmail.com")
+                .about("this is testing create method")
+                .gender("male")
+                .imageName("shrikant.png")
+                .build();
+
+
     }
     @Test
     public void createUserTest(){
