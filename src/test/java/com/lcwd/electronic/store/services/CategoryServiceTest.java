@@ -111,5 +111,13 @@ public class CategoryServiceTest {
         Assertions.assertEquals(category.getTitle(),categoryDto.getTitle(),"Title not matched");
     }
 
+    @Test
+    public void searchByTitleTest(){
+        String keyword = "Laptop";
+        Mockito.when(categoryRepository.findByTitle(keyword)).thenReturn(Arrays.asList(category,category1));
+        List<CategoryDto> categoryDtos = categoryService.searchByTitle(keyword);
+        Assertions.assertEquals(2,categoryDtos.size(),"size not matched");
+    }
+
 
 }
