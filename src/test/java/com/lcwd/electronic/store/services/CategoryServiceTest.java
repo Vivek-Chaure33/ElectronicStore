@@ -25,6 +25,7 @@ public class CategoryServiceTest {
     @Autowired
     private ModelMapper mapper;
 
+    private CategoryDto categoryDto;
     private Category category;
     @BeforeEach
     public void init(){
@@ -33,6 +34,12 @@ public class CategoryServiceTest {
                 .coverImage("laptop.png")
                 .description("This category contains laptops")
                 .build();
+
+         categoryDto=CategoryDto.builder()
+                 .title("Mobile")
+                 .coverImage("mobile.jpg")
+                 .description("this is all about mobile")
+                 .build();
     }
     @Test
     public void createTest(){
@@ -43,6 +50,17 @@ public class CategoryServiceTest {
         Assertions.assertNotNull(category1);
         Assertions.assertEquals("Laptop",category1.getTitle(),"Title not matched !!");
 
+    }
+
+    @Test
+    public void updateCategoryTest(){
+        String catgoryId="asdjas";
+        Mockito.when(categoryRepository.findById(catgoryId)).thenReturn(Optional.of(category));
+        Mockito.when(categoryRepository.save(Mockito.any())).thenReturn(category);
+        CategoryDto updateCategory = categoryService.update(categoryDto,catgoryId);
+        System.out.println(updateCategory.getTitle());
+        Assertions.assertNotNull(updateCategory);
+        Assertions.assertEquals("Mobile",updateCategory.getTitle(),"Title not matched !!");
     }
 
 

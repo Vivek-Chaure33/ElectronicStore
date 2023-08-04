@@ -1,10 +1,7 @@
 package com.lcwd.electronic.store.dto;
 
 import com.lcwd.electronic.store.validate.ImageNameValid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -13,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Setter
+@Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
