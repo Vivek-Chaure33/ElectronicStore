@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.UUID;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 public class CategoryControllerTest {
 
     @MockBean
@@ -72,5 +74,29 @@ public class CategoryControllerTest {
         return null;
     }
 
+    @Test
+    void updateCategoryTest() throws Exception {
 
+        String categoryId=UUID.randomUUID().toString();
+        CategoryDto categoryDto=CategoryDto.builder()
+                .categoryId(categoryId)
+                .title("Mobiles")
+                .description("Mobiles available with discounts")
+                .coverImage("abc.png")
+                .build();
+
+        Mockito.when(categoryServiceI.update(Mockito.any(),Mockito.anyString())).thenReturn(categoryDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/categories/" +categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(category))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title").exists())
+                .andExpect(jsonPath("$.description").exists());
+
+
+
+    }
 }
