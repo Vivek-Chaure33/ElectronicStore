@@ -1,6 +1,7 @@
 package com.lcwd.electronic.store.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.UserDto;
 import com.lcwd.electronic.store.entity.User;
 import com.lcwd.electronic.store.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -102,6 +104,22 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void getUserTest() throws Exception {
+        String userId = UUID.randomUUID().toString();
+
+        UserDto userDto = mapper.map(user, UserDto.class);
+
+        Mockito.when(userService.getUser(userId)).thenReturn(userDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/" +userId)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").exists());
+
     }
 
 
