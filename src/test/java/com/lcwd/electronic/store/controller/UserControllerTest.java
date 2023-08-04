@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,5 +75,24 @@ public class UserControllerTest {
         }
         return null;
     }
+    @Test
+    public void updateUserTest() throws Exception
+    {
+        String userId = "123";
+        UserDto dto = this.mapper.map(user, UserDto.class);
+
+        Mockito.when(userService.updateUser(Mockito.any(),Mockito.anyString())).thenReturn(dto);
+
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.put("/users/"+userId)
+                                //.header(HttpHeaders.AUTHORIZATION,"Bearer Token")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(convertObjectToJsonString(user))
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name").exists());
+    }
+
 
 }
