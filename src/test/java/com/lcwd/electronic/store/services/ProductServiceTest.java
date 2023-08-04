@@ -13,9 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -129,5 +127,19 @@ public class ProductServiceTest {
         Assertions.assertNotNull(productDto);
         Assertions.assertEquals(product1.getTitle(),productDto.getTitle(),"Title not matched");
     }
+    @Test
+    public void searchProductTest(){
+        String subTitle = "Laptops";
+        List<Product>productList = Arrays.asList(product1,product2);
+
+        Sort sort = Sort.by("name").ascending();
+        Pageable pageable = PageRequest.of(2,2,sort);
+        Page<Product>page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findByTitleContaining(pageable,subTitle)).thenReturn(page);
+
+        PageableResponse<ProductDto> allProduct = productServiceI.searchByTitle("Laptops",2,2,"name","asc");
+        Assertions.assertEquals(2,allProduct.getTotalElements());
+    }
+
 
 }
