@@ -1,5 +1,6 @@
 package com.lcwd.electronic.store.services;
 
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.dto.ProductDto;
 import com.lcwd.electronic.store.entity.Product;
 import com.lcwd.electronic.store.repository.ProductRepository;
@@ -12,9 +13,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootTest
 public class ProductServiceTest {
@@ -94,6 +97,25 @@ public class ProductServiceTest {
         Assertions.assertEquals("Samsung",updatedProduct.getTitle(),"product name is not Valid");
     }
 
+    @Test
+    public void deleteProductTest()
+    {
+        String productId = UUID.randomUUID().toString();
+        Mockito.when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
 
+        productServiceI.deleteProduct(productId);
+        Mockito.verify(productRepository,Mockito.times(1)).delete(product1);
+    }
+//    @Test
+//    public void getAllProductTest(){
+//        List<Product> productList = Arrays.asList(product1,product2);
+//        Page<Product> page = new PageImpl<>(productList);
+//        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+//
+//        //Sort sort = Sort.by("name").ascending();
+//        //Pageable pageable = PageRequest.of(1,2,sort);
+//        PageableResponse<ProductDto> allProduct = productServiceI.getAllProducts(1,2,"name","asc");
+//        Assertions.assertEquals(2,allProduct.getContent().size());
+//    }
 
 }
