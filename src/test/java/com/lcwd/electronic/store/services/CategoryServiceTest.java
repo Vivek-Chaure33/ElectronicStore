@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest
 public class CategoryServiceTest {
@@ -63,6 +64,14 @@ public class CategoryServiceTest {
         Assertions.assertEquals("Mobile",updateCategory.getTitle(),"Title not matched !!");
     }
 
+    @Test
+    public void deleteCategoryTest(){
+        String categoryId= UUID.randomUUID().toString();
+        Mockito.when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+        categoryService.delete(categoryId);
+        Mockito.verify(categoryRepository,Mockito.times(1)).delete(category);
+
+    }
 
 
 }
