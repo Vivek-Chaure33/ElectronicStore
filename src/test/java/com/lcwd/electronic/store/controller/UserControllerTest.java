@@ -94,5 +94,15 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").exists());
     }
 
+    @Test
+    public void deleteUserTest() throws Exception
+    {
+        String userId = UUID.randomUUID().toString();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/users/"+userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
 
 }
