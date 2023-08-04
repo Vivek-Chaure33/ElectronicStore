@@ -171,5 +171,43 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    void getAllUsersTest() throws Exception {
+
+        UserDto userDto1 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Samar")
+                .email("samar@gmail.com").password("samar123").about("developer").imageName("abc.png").build();
+        UserDto userDto2 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Veeraj")
+                .email("veeraj@gmail.com").password("veeraj123").about("developer").imageName("xyz.png").build();
+
+        UserDto userDto3 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Sandip")
+                .email("sandip@gmail.com").password("sandip123").about("developer").imageName("def.png").build();
+
+        UserDto userDto4 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Kumar")
+                .email("kumar@gmail.com").password("kumar123").about("developer").imageName("wds.png").build();
+
+
+        PageableResponse<UserDto> pageableResponse=new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(userDto1,userDto2,userDto3,userDto4));
+        pageableResponse.setPageNumber(0);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setTotalElements(1000l);
+        pageableResponse.setTotalPages(100);
+        pageableResponse.setLastPage(false);
+
+        Mockito.when(userService.getAllUsers(Mockito.anyInt(),
+                Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+
+    }
+
+
+
 
 }
