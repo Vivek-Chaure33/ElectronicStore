@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -139,5 +140,36 @@ public class UserControllerTest {
 
 
     }
+    @Test
+    public void searchUserTest() throws Exception {
+
+        UserDto userDto1 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Samar")
+                .email("samar@gmail.com").password("samar123").about("developer").imageName("abc.png").build();
+        UserDto userDto2 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Veeraj")
+                .email("veeraj@gmail.com").password("veeraj123").about("developer").imageName("xyz.png").build();
+
+        UserDto userDto3 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Sandip")
+                .email("sandip@gmail.com").password("sandip123").about("developer").imageName("def.png").build();
+
+        UserDto userDto4 = UserDto.builder().userId(UUID.randomUUID().toString()).name("Kumar")
+                .email("kumar@gmail.com").password("kumar123").about("developer").imageName("wds.png").build();
+
+
+        List<UserDto> dtoList = Arrays.asList(userDto1, userDto2, userDto3, userDto4);
+
+        String keyword="a";
+
+        Mockito.when(userService.searchUser(keyword)).thenReturn(dtoList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/search/"+keyword)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+
+    }
+
 
 }
