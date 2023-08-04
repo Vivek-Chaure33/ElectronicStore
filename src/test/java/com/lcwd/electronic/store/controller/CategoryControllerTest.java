@@ -2,6 +2,7 @@ package com.lcwd.electronic.store.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lcwd.electronic.store.dto.CategoryDto;
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.entity.Category;
 import com.lcwd.electronic.store.service.CategoryService;
 import com.lcwd.electronic.store.service.ProductServiceI;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 @SpringBootTest
@@ -125,6 +127,46 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk());
 
 
+    }
+
+    @Test
+    void getAllCategoriesTest() throws Exception {
+        CategoryDto categoryDto1=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Headphones")
+                .description("Headphones available with good quality")
+                .coverImage("xyz.png")
+                .build();
+        CategoryDto categoryDto2=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("LED TVS")
+                .description("LED TVS available with good quality")
+                .coverImage("def.png")
+                .build();
+        CategoryDto categoryDto3=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("Electronics")
+                .description("Eletronics products available with good quality")
+                .coverImage("hjh.png")
+                .build();
+        CategoryDto categoryDto4=CategoryDto.builder().categoryId(UUID.randomUUID().toString())
+                .title("phones")
+                .description("phones available with good quality")
+                .coverImage("dbw.png")
+                .build();
+
+        PageableResponse<CategoryDto> pageableResponse=new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(categoryDto1,categoryDto2,categoryDto3,categoryDto4));
+        pageableResponse.setPageNumber(0);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setTotalPages(100);
+        pageableResponse.setTotalElements(1000l);
+        pageableResponse.setLastPage(false);
+
+        Mockito.when(categoryServiceI.getAllCategory(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/categories/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }
