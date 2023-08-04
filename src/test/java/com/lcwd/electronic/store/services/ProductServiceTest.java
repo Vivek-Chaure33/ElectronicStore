@@ -55,11 +55,11 @@ public class ProductServiceTest {
                 .build();
         productDto = ProductDto.builder()
                 .addedDate(new Date())
-                .title("Dell")
+                .title("Samsung")
                 .price(2000)
                 .live(true)
                 .stock(true)
-                .productImage("dell.png")
+                .productImage("samsung.png")
                 .description("This is best in Market")
                 .quantity(2)
                 .discountedPrice(5600)
@@ -77,6 +77,21 @@ public class ProductServiceTest {
         System.out.println(productDto.getTitle());
         Assertions.assertNotNull(productDto);
         Assertions.assertEquals("Lenovo",productDto.getTitle());
+    }
+
+    @Test
+    public void updateProductTest()
+    {
+        String productId = "hasdfvjyehf";
+
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product1));
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product1);
+
+        ProductDto updatedProduct = productServiceI.updateProduct(productDto, productId);
+        System.out.println(updatedProduct.getTitle());
+
+        Assertions.assertNotNull(updatedProduct);
+        Assertions.assertEquals("Samsung",updatedProduct.getTitle(),"product name is not Valid");
     }
 
 
