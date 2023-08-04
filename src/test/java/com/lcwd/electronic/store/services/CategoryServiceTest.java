@@ -1,6 +1,7 @@
 package com.lcwd.electronic.store.services;
 
 import com.lcwd.electronic.store.dto.CategoryDto;
+import com.lcwd.electronic.store.dto.PageableResponse;
 import com.lcwd.electronic.store.entity.Category;
 import com.lcwd.electronic.store.repository.CategoryRepository;
 import com.lcwd.electronic.store.service.CategoryService;
@@ -12,7 +13,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +33,7 @@ public class CategoryServiceTest {
     private ModelMapper mapper;
 
     private CategoryDto categoryDto;
-    private Category category;
+    private Category category, category1;
     @BeforeEach
     public void init(){
          category = Category.builder()
@@ -35,6 +41,12 @@ public class CategoryServiceTest {
                 .coverImage("laptop.png")
                 .description("This category contains laptops")
                 .build();
+
+         category1=Category.builder()
+                 .title("Mobile")
+                 .description("This category contains mobile")
+                 .coverImage("mobile.jpeg")
+                 .build();
 
          categoryDto=CategoryDto.builder()
                  .title("Mobile")
@@ -72,6 +84,20 @@ public class CategoryServiceTest {
         Mockito.verify(categoryRepository,Mockito.times(1)).delete(category);
 
     }
+
+    @Test
+    public void getAllCategoryTest(){
+
+        List<Category> categoryList = Arrays.asList(category1, category);
+        Page<Category> page = new PageImpl<>(categoryList);
+        Mockito.when(categoryRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        PageableResponse<CategoryDto> allCategory=categoryService.getAllCategory(1,2,"name","asc");
+        Assertions.assertEquals(2,allCategory.getContent().size());
+
+    }
+
+
 
 
 }
