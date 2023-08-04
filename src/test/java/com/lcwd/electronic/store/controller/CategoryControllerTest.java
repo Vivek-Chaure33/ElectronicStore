@@ -114,4 +114,17 @@ public class CategoryControllerTest {
 
     }
 
+    @Test
+    void deleteCategoryTest() throws Exception {
+        String categoryId=UUID.randomUUID().toString();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/categories/"+categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+
+    }
+
 }
