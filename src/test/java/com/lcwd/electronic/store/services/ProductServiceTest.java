@@ -106,16 +106,28 @@ public class ProductServiceTest {
         productServiceI.deleteProduct(productId);
         Mockito.verify(productRepository,Mockito.times(1)).delete(product1);
     }
-//    @Test
-//    public void getAllProductTest(){
-//        List<Product> productList = Arrays.asList(product1,product2);
-//        Page<Product> page = new PageImpl<>(productList);
-//        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
-//
-//        //Sort sort = Sort.by("name").ascending();
-//        //Pageable pageable = PageRequest.of(1,2,sort);
-//        PageableResponse<ProductDto> allProduct = productServiceI.getAllProducts(1,2,"name","asc");
-//        Assertions.assertEquals(2,allProduct.getContent().size());
-//    }
+    @Test
+    public void getAllProductTest(){
+        List<Product> productList = Arrays.asList(product1,product2);
+        Page<Product> page = new PageImpl<>(productList);
+        Mockito.when(productRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+
+        //Sort sort = Sort.by("name").ascending();
+        //Pageable pageable = PageRequest.of(1,2,sort);
+        PageableResponse<ProductDto> allProduct = productServiceI.getAllProducts(1,2,"name","asc");
+        Assertions.assertEquals(2,allProduct.getContent().size());
+    }
+
+    @Test
+    public void getProductTest(){
+        String productId="d7da596d-2a1c-4292-be7d-4f3a71e65f60";
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product1));
+
+        // actual call of service method
+        ProductDto productDto = productServiceI.getProduct(productId);
+
+        Assertions.assertNotNull(productDto);
+        Assertions.assertEquals(product1.getTitle(),productDto.getTitle(),"Title not matched");
+    }
 
 }
