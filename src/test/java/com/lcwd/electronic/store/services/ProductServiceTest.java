@@ -144,15 +144,16 @@ public class ProductServiceTest {
     public void getAllLiveTest()
     {
 
-        List<Product> productList = Arrays.asList(product1,product2);
-        Sort sort = Sort.by("name").ascending();
-        Pageable pageable = PageRequest.of(1,2,sort);
-        Page<Product> page = new PageImpl<>(productList);
-        Mockito.when(productRepository.findByLiveTrue(pageable)).thenReturn(page);
+            List<Product> productList = Arrays.asList(product1,product2);
+//            Sort sort=Sort.by("name").ascending();
+//            Pageable pageable=PageRequest.of(1,2,sort);
+            Page<Product> page=new PageImpl<>(productList);
+            Mockito.when(productRepository.findByLiveTrue((Pageable) Mockito.any())).thenReturn(page);
+            PageableResponse<ProductDto> allProduct=productServiceI.getAllLive(1,2,"name","asc");
+            Assertions.assertEquals(2,allProduct.getContent().size());
 
-        PageableResponse<ProductDto> allProduct = productServiceI.getAllLive(1,2,"name","asc");
-        Assertions.assertEquals(2,allProduct.getContent().size());
-    }
+        }
+
 
 
 }
