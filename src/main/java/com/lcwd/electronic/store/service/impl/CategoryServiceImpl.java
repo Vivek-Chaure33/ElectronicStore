@@ -65,7 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
         logger.info("sending request to repository for update category:{}",categoryId);
         Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(ApiConstant.CATEGORY_NOT_FOUND + categoryId));
         category.setTitle(categoryDto.getTitle());
-        category.setDescription(categoryDto.getTitle());
+        category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
         Category updatedCategory = categoryRepo.save(category);
         CategoryDto updatedDto = mapper.map(updatedCategory, CategoryDto.class);
